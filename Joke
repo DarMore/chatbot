@@ -1,0 +1,28 @@
+package ru.yournick.projects.jokebot.model;
+
+import lombok.Data;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Data
+@Entity
+@Table(name = "jokes")
+public class Joke {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String text;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+}
