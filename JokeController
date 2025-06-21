@@ -1,0 +1,47 @@
+package ru.yournick.projects.jokebot.controller;
+
+import ru.yournick.projects.jokebot.model.Joke;
+import ru.yournick.projects.jokebot.service.JokeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/jokes")
+public class JokeController {
+    private final JokeService jokeService;
+
+    public JokeController(JokeService jokeService) {
+        this.jokeService = jokeService;
+    }
+
+    @GetMapping
+    public List<Joke> getAllJokes() {
+        return jokeService.getAllJokes();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Joke> getJokeById(@PathVariable Long id) {
+        Joke joke = jokeService.getJokeById(id);
+        return joke != null ? ResponseEntity.ok(joke) : ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public Joke createJoke(@RequestBody Joke joke) {
+        return jokeService.createJoke(joke);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Joke> updateJoke(@PathVariable Long id, @RequestBody Joke joke) {
+        Joke updatedJoke = jokeService.updateJoke(id, joke);
+        return ResponseEntity.ok(updatedJoke);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteJoke(@PathVariable Long id) {
+        jokeService.deleteJoke(id);
+        return ResponseEntity.noContent().build();
+    }
+}
